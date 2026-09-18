@@ -156,10 +156,12 @@ source .venv/bin/activate       # macOS / Linux
 pip install -r requirements.txt
 ```
 
-> **Note:** The original `requirements.txt` included `torch`, `torchvision`,
-> and `torchaudio` (~2 GB). These are **not used** by the current pipeline and
-> have been removed. Re-add them only if you extend the project with
-> transformer-based models (e.g. AfriBERTa).
+> **Note:** The current `requirements.txt` still includes `torch`,
+> `torchvision`, and `torchaudio`, although these packages are **not used** by
+> the classical TF-IDF pipeline. They add roughly 2 GB to the installation.
+> Remove those three lines before installing if you only need the current
+> CPU-based baseline. Keep them if you plan to add transformer-based models
+> such as AfriBERTa.
 
 ---
 
@@ -189,6 +191,12 @@ python src/train.py \
   --vectorizer_type both
 ```
 
+The default classifier is Logistic Regression with TF-IDF features. The
+recommended command above saves the trained model to
+`models/hausa_model_lr.joblib`, which is the model used by the evaluation and
+prediction examples. Training performs five-fold `GridSearchCV` by default
+and writes a development-set confusion matrix next to the metrics file.
+
 **CLI options for `train.py`:**
 
 | Flag | Default | Description |
@@ -216,7 +224,8 @@ python src/eval.py \
 
 The script prints accuracy, macro-F1, precision, recall, and a full
 per-class classification report to the console, and saves the same data
-to the JSON report file.
+to the JSON report file. Evaluation also saves a confusion-matrix image next
+to that report.
 
 ---
 
